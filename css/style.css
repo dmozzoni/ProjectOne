@@ -1,0 +1,73 @@
+body {
+  text-align: center;
+}
+
+#title {
+  display:block;
+  background-color: orange;
+}
+#buttonBar {
+  display:block;
+  background-color: red;
+  height:30px;
+
+}
+#buttonBar button {
+display: inline-block;
+}
+
+
+#mainPane {
+  background-color: gray;
+  height: 900px;
+  width: 1000px;
+  text-align: center;
+
+}
+
+#photoPane {
+  /*display: inline-block;*/
+float:left;
+
+  margin : 0;
+
+  width: 500px;
+  height: 750px;
+  background-color: green;
+
+}
+#choicePane {
+  float:left;
+text-align: center;
+  /*display: inline-block;*/
+
+  width: 200px;
+  height: 750px;
+  background-color: lightblue;
+
+}
+
+#settingsPane {
+  /*display: inline-block;*/
+  float:left;
+  text-align: center;
+
+  width: 100px;
+  height: 750px;
+  background-color: yellow;
+
+}
+
+img {
+  width:480px;
+}
+.answerButtons {
+  width:150px;
+  height: 75px;
+  border: 1 solid black;
+  display:block;
+  margin: 0 auto;
+}
+.answerButtons:hover {
+  background-color: darkgray;
+}
