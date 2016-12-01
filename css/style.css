@@ -71,3 +71,14 @@ img {
 .answerButtons:hover {
   background-color: darkgray;
 }
+
+.buttonBar {
+  width: 200px;
+  height: 30px;
+  border: 1 solid black;
+  display:inline-block;
+  margin: 0 auto;
+}
+.buttonBar:hover {
+  background-color: darkgray;
+}

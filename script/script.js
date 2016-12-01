@@ -1,16 +1,49 @@
-let foo;
+"use strict";
+// let foo;
+// let databaseSize;
+// let fullGroupTypeArray = [], fullCommonNameArray = [], fullLatinNameArray = [];
+// let fullImgSrcArray = [], fullDateArray = [];
+// console.log("1");
 
-//$(document).ready(function() {
+
+$(document).ready(function() {
 
 
+//   console.log("2");
+//
+// //let foo;
+//
+//
+//  d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQpA97t0qk19B00C617SeAF2eKZSJURLlNsy9b_UfgvUxti3Bw6ymc365TfoXHpQNfg7LDxVAYO_6-s/pub?gid=0&single=true&output=csv", function(data) {
+// //   foo = data;
+// //   console.log(foo[0]);
+// console.log(" inside d3 1");
+//
+//    databaseSize = data.length;
+//    for(let i = 0; i<databaseSize; i++) {
+//      fullGroupTypeArray[i] = data[i].groupType;
+//       fullCommonNameArray[i] = data[i].commonName;
+//       fullLatinNameArray[i] = data[i].latinName;
+//       fullImgSrcArray[i] = data[i].imgSrc;
+//       fullDateArray[i] = data[i].date;
+//    }
+//
+//    console.log("inside d3 2");
+//
+//       console.log(data[0]);
+//       console.log(fullCommonNameArray[data.length-1]);
+//
+//
+//
+//
+//  });
 
-//let foo;
 
+ console.log("3");
 
- d3.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQpA97t0qk19B00C617SeAF2eKZSJURLlNsy9b_UfgvUxti3Bw6ymc365TfoXHpQNfg7LDxVAYO_6-s/pub?gid=0&single=true&output=csv", function(data) {
-   foo = data;
-   console.log(data[0]);
- });
+//while (fullCommonNameArray[0] === undefined) {console.log("wait");}
+
+ //console.log(foo);
 
 //
 // foo = [];
@@ -54,36 +87,16 @@ let foo;
 //   latinName:"Vanessa virginiensis",
 //   suggest : ""
 // };
-
-function GetUnique(inputArray)
-{
-    var outputArray = [];
-
-    for (var i = 0; i < inputArray.length; i++)
-    {
-        if ((jQuery.inArray(inputArray[i], outputArray)) == -1)
-        {
-            outputArray.push(inputArray[i]);
-        }
-    }
-
-    return outputArray;
-}
+console.log("4");
 
 
-let databaseSize = foo.length;
-let fullGroupTypeArray = [], fullCommonNameArray = [], fullLatinNameArray = [];
-let fullImgSrcArray = [], fullDateArray = [];
 
-for(let i = 0; i<databaseSize; i++) {
-  fullGroupTypeArray[i] = foo[i].groupType;
-   fullCommonNameArray[i] = foo[i].commonName;
-   fullLatinNameArray[i] = foo[i].latinName;
-   fullImgSrcArray[i] = foo[i].imgSrc;
-   fullDateArray[i] = foo[i].date;
-}
+console.log("5");
+
+console.log(fullGroupTypeArray);
 let uniqueGroups = GetUnique(fullGroupTypeArray);
 console.log(uniqueGroups);
+console.log("6");
 
 let full = {
   commonName: fullCommonNameArray,
@@ -116,7 +129,7 @@ let arrIndexToObj = function(index,obj) {
   return current;
 };
 
-let index = 0
+let index = 0;
 
 let setupQuestion = function() {
 
@@ -132,7 +145,7 @@ let setupQuestion = function() {
   $('#button5').text("Test");
   index++;
 
-}
+};
 
 //for(let i = 0; i<3; i++) {
 
@@ -199,4 +212,4 @@ setupQuestion();
 
 
 
-//});
+});
