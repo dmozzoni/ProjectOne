@@ -1,12 +1,13 @@
 "use strict";
+
 let databaseSize;
 let fullGroupTypeArray = [], fullCommonNameArray = [], fullLatinNameArray = [];
 let fullImgSrcArray = [], fullDateArray = [];
 let dataFileSrc = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQpA97t0qk19B00C617SeAF2eKZSJURLlNsy9b_UfgvUxti3Bw6ymc365TfoXHpQNfg7LDxVAYO_6-s/pub?gid=0&single=true&output=csv";
 let index, current, working;
+let database = {};
 
-
-function GetUnique(inputArray) {
+function getUnique(inputArray) {
     let outputArray = [];
     for (let i = 0; i < inputArray.length; i++) {
         if ((jQuery.inArray(inputArray[i], outputArray)) == -1) {
@@ -40,10 +41,26 @@ function shuffle(array) { // Ripped from StackOverflow
 
 
 function loadDatabase() {
-    d3.csv(dataFileSrc, function(data) {
-      initGame(data);
-    });
-}
+
+    // if(localStorage.data) {
+    //
+    //   initGame(localStorage.data);
+    //
+    //
+    // } else {
+
+      d3.csv(dataFileSrc, function(data) {
+
+        // localStorage.data = data;
+        initGame(data);
+
+      });
+
+
+    // }
+
+
+    }
 
 
 let arrIndexToObj = function(index,obj) {
@@ -57,36 +74,33 @@ let arrIndexToObj = function(index,obj) {
 };
 
 
+let fillChoiceRandom = function(current, array, num) {
 
-let fillChoiceRandom = function(array, num) {
-    return shuffle(array).slice(0,num);
+    let tmp = getUnique(array)
+    let tmpp = tmp.filter(function(ii){
+        return ii !== current.commonName;
+    });
+
+    return shuffle(tmpp).slice(0,num);
 }
-
 
 
 let setupQuestion = function() {
 
-let choices = [];
-current = arrIndexToObj(index,working);
- let workComNamTmp = working.commonName.slice();
- console.log(working.commonName);
-let tmp = fillChoiceRandom(workComNamTmp,4);
-console.log(working.commonName);
+    let choices = [];
+    current = arrIndexToObj(index,working);
+    let workComNamTmp = working.commonName.slice();
+    let tmp = fillChoiceRandom(current, workComNamTmp,4);
+    tmp.push(current.commonName);
+    choices = shuffle(tmp);
 
-tmp.push(current.commonName);
-
-choices = shuffle(tmp);
-
-  console.log(choices);
-  console.log(current);
-
-  $('img').attr("src", "img/"+current.imgSrc);
-  $('#button1').text(choices[0]);
-  $('#button2').text(choices[1]);
-  $('#button3').text(choices[2]);
-  $('#button4').text(choices[3]);
-  $('#button5').text(choices[4]);
-  index++;
+    $('img').attr("src", "img/"+current.imgSrc);
+    $('#button1').text(choices[0]);
+    $('#button2').text(choices[1]);
+    $('#button3').text(choices[2]);
+    $('#button4').text(choices[3]);
+    $('#button5').text(choices[4]);
+    index++;
 
 };
 
@@ -104,54 +118,105 @@ function initGame(data) {
      fullDateArray[i] = data[i].date;
   }
 
-  let uniqueGroups = GetUnique(fullGroupTypeArray);
+  let uniqueGroups = getUnique(fullGroupTypeArray);
 
-for (let i=0;i<uniqueGroups.length;i++) {
-    $("#buttonBar").append("<button class='buttonBar'>" + uniqueGroups[i] +"</button>");
-}
+  for (let i=0;i<uniqueGroups.length;i++) {
 
+      $("fieldset").append('<label>' + uniqueGroups[i] +'</label>');
+      $("fieldset").append('<input type="checkbox" class="subgrps" checked=true value="' + uniqueGroups[i] +'">');
 
-// <fieldset data-role="controlgroup" data-type="horizontal">
-//        <legend>Choose as many favorite colors as you'd like:</legend>
-//          <label for="red">Red</label>
-//          <input type="checkbox" name="favcolor" id="red" value="red">
-//          <label for="green">Green</label>
-//          <input type="checkbox" name="favcolor" id="green" value="green">
-//          <label for="blue">Blue</label>
-//          <input type="checkbox" name="favcolor" id="blue" value="blue">
-//      </fieldset>
-//
-//
+      database[uniqueGroups[i]] = { commonName: [], date: [], groupType: [], imgSrc: [], latinName: [] };
 
+  }
 
-
-  let full = {
-    commonName: fullCommonNameArray,
-    date:fullDateArray,
-    groupType:fullGroupTypeArray,
-    imgSrc:fullImgSrcArray,
-    latinName:   fullLatinNameArray
+   database["full"] = {
+     commonName: fullCommonNameArray,
+     date: fullDateArray,
+     groupType: fullGroupTypeArray,
+     imgSrc: fullImgSrcArray,
+     latinName: fullLatinNameArray
   };
 
-   working = full;
-   index = 0;
+
+for (let i = 0; i<uniqueGroups.length; i++) {
+    for (let j = 0; j<database.full.groupType.length; j++) {
+        if (database.full.groupType[j] === uniqueGroups[i]) {
+              database[uniqueGroups[i]].commonName.push(database.full.commonName[j]);
+              database[uniqueGroups[i]].date.push(database.full.date[j]);
+              database[uniqueGroups[i]].groupType.push(database.full.groupType[j]);
+              database[uniqueGroups[i]].imgSrc.push(database.full.imgSrc[j]);
+              database[uniqueGroups[i]].latinName.push(database.full.latinName[j]);
+        }
+    }
+}
+
+  working = jQuery.extend(true, {}, database.full); //copy object by value
+
+  index = 0;
   setupQuestion();
 
 }
 
 
 $('.answerButtons').on('click', function() {
-  console.log(this);
-  console.log(current);
-  if($(this).text() == current.commonName) {
-      alert('Yes');
-setupQuestion();
-
-//      $("#mainPane").trigger("nextQuestion",setupQuestion);
-
-}
-  else {alert('No');}
+    if($(this).text() == current.commonName) {
+        alert('Yes');
+        setupQuestion();
+      }
+        else {alert('No');}
 });
+
+
+
+
+$('#propertiesButton').on('click', function() {
+    working = { commonName: [], date: [], groupType: [], imgSrc: [], latinName: [] };
+    for (let i = 0; i<$(".subgrps").length;i++) {
+        if (  $('.subgrps')[i].checked  ) {
+            working.commonName = working.commonName.concat(database[$('.subgrps')[i].value].commonName);
+            working.date = working.date.concat(database[$('.subgrps')[i].value].date);
+            working.latinName = working.latinName.concat(database[$('.subgrps')[i].value].latinName);
+            working.groupType = working.groupType.concat(database[$('.subgrps')[i].value].groupType);
+            working.imgSrc = working.imgSrc.concat(database[$('.subgrps')[i].value].imgSrc);
+        }
+    }
+
+    index = 0;
+    setupQuestion();
+
+});
+
+
+$(document).on('change', 'input', function(){
+     let allUnchecked = true;
+
+      for (let i = 0; i<$("input").length;i++) {
+         if ($("input")[i].checked) {allUnchecked = false;}
+      }
+
+      if(allUnchecked) {$('#propertiesButton')[0].disabled=true;}
+      else {$('#propertiesButton')[0].disabled=false;}
+
+});
+
+
+
+
+
+$('#startButton').on('click', function () {
+   $('#welcomePane').fadeToggle('slow', function(){
+      $('#mainPane').fadeToggle('slow');
+   });
+});
+
+$('#propertiesButton').on('click', function () {
+   $('#propertiesPane').fadeToggle('slow', function(){
+      $('#mainPane').fadeToggle('slow');
+   });
+});
+
+
+
 
 
 loadDatabase();

@@ -15,11 +15,10 @@
 
 
 
-<div id="mainPane">
+<div class="fullPane" id="mainPane">
     <div id="title">
         <h1>Butterfly Quiz</h1>
     </div>
-    <div id="buttonBar"></div>
 
     <div id="photoPane">
         <img src="#" alt="Butterfly">
@@ -33,13 +32,50 @@
         <button class="answerButtons" id="button4">Button4</button>
         <button class="answerButtons" id="button5">Button5</button>
     </div>
+</div>
 
-    <div id="settingsPane">
-        <h3>Settings</h3>
-    </div>
+<div class="fullPane" id="welcomePane">
+       <h1>Welcome</h1>
+       <button id="startButton">Start</button>
 
 </div>
 
+
+<div class="fullPane" id="propertiesPane">
+       <h1>Properties</h1>
+
+       <div id="buttonBar"></div>
+
+       <fieldset data-role="controlgroup" data-type="horizontal">
+                <legend>Which Butterfly families to include:</legend>
+       </fieldset>
+
+
+       <!-- .slideThree -->
+
+       <!-- .slideThree -->
+       <h5>Show Latin Names</h5>
+       <div class="slideThree">
+         <input type="checkbox" value="None" id="checkLatin" name="check" checked />
+         <label for="checkLatin"></label>
+       </div>
+       <h5>Show Dates</h5>
+       <div class="slideThree">
+         <input type="checkbox" value="None" id="checkDate" name="check" checked />
+         <label for="checkDate"></label>
+       </div>
+       <!-- end .slideThree -->
+
+
+
+
+       <button id="propertiesButton">Done</button>
+
+
+
+
+
+</div>
 
 
 
