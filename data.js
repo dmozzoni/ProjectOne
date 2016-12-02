@@ -8,6 +8,11 @@ let index, current, working;
 let database = {};
 let dateTxtBool = false;
 
+let scoreVals = [10,6,3,1,0];
+let numGuesses = 0;
+let scoreTotal = 0;
+
+
 function sleep(ms)
 {
   var dt = new Date();
@@ -138,13 +143,19 @@ let fillChoiceRandom = function(answer, array, num) {
 let setupQuestion = function() {
 
     let choices = [];
+    numGuesses = 0;
     current = arrIndexToObj(index,working);
     let workComNamTmp = working.commonName.slice();
     let tmp = fillChoiceRandom(current.commonName, workComNamTmp,4);
     tmp.push(current.commonName);
     choices = shuffle(tmp);
 
-    $('img').attr("src", "img/"+current.imgSrc);
+//    $('img').attr("src", "img/"+current.imgSrc);
+$('#photoPane').css('background-image','url(' + 'img/'+current.imgSrc+')')
+//$('#photoPane').css('background-image','img/'+current.imgSrc)
+//background-image: url('../img/rsp.jpg');
+
+
   //  if(dateTxtBool) {
       $('#txtDate').eq(0).text(current.date);
     //}
@@ -191,7 +202,7 @@ function initGame(data) {
   for (let i=0;i<uniqueGroups.length;i++) {
 
       $("fieldset").append('<label>' + uniqueGroups[i] +'</label>');
-      $("fieldset").append('<input type="checkbox" class="subgrps" checked=true value="' + uniqueGroups[i] +'">');
+      $("fieldset").append('<input type="checkbox" class="subgrps" checked=true value="' + uniqueGroups[i] +'"><br>');
 
       database[uniqueGroups[i]] = { commonName: [], date: [], groupType: [], imgSrc: [], latinName: [] };
 
@@ -220,6 +231,12 @@ for (let i = 0; i<uniqueGroups.length; i++) {
 
   working = jQuery.extend(true, {}, database.full); //copy object by value
 
+  // for (let i = 0; i<$(".subgrps").length;i++) {
+  //      num += database[$(".subgrps")[i].value].commonName.length;
+  // }
+$('#numAvailableQuestions').text(database.full.date.length);
+
+
   index = 0;
   setupQuestion();
 
@@ -229,6 +246,8 @@ for (let i = 0; i<uniqueGroups.length; i++) {
 $('.answerButtons').on('click', function() {
     if($(this).text() == current.commonName) {
           $(this).toggleClass("correctAnswer");
+          scoreTotal += scoreVals[numGuesses]
+          $('#score').text(scoreTotal);
           $("#txtAnswer").fadeIn('slow', function() {
               $("#txtAnswer").fadeOut('slow', function() {
                   setupQuestion();
@@ -236,6 +255,7 @@ $('.answerButtons').on('click', function() {
           });
     } else {
           $(this)[0].disabled = true;
+          numGuesses++;
           $(this).toggleClass("wrongAnswer");
     }
 });
@@ -245,6 +265,7 @@ $('.answerButtons').on('click', function() {
 
 $('#propertiesButton').on('click', function() {
     working = { commonName: [], date: [], groupType: [], imgSrc: [], latinName: [] };
+    let num;
     for (let i = 0; i<$(".subgrps").length;i++) {
         if (  $('.subgrps')[i].checked  ) {
             working.commonName = working.commonName.concat(database[$('.subgrps')[i].value].commonName);
@@ -254,30 +275,44 @@ $('#propertiesButton').on('click', function() {
             working.imgSrc = working.imgSrc.concat(database[$('.subgrps')[i].value].imgSrc);
         }
     }
-
     index = 0;
     setupQuestion();
 
 });
 
 
-$(document).on('change', 'input', function(){
+$(document).on('change', '.subgrps', function(){
      let allUnchecked = true;
+     let num=0;
 
-      for (let i = 0; i<$("input").length;i++) {
-         if ($("input")[i].checked) {allUnchecked = false;}
+      for (let i = 0; i<$(".subgrps").length;i++) {
+  //     console.log(database[$(".subgrps")[i].value].commonName.length);
+
+         if ($(".subgrps")[i].checked) {
+           num += database[$(".subgrps")[i].value].commonName.length;
+           allUnchecked = false;
+         }
       }
+
+
 
       if(allUnchecked) {$('#propertiesButton')[0].disabled=true;}
       else {$('#propertiesButton')[0].disabled=false;}
+
+
+
+
+
+      $('#numAvailableQuestions').text(num);
+
 
 });
 
 $('#checkDate').on('change', function(){
 
-      if($("#checkDate")[0].checked) {          $("#txtDate").toggleClass("hide");
+      if($("#checkDate")[0].checked) {$("#txtDate").toggleClass("hide");
 }
-      else {          $("#txtDate").toggleClass("hide");
+      else {$("#txtDate").toggleClass("hide");
 }
 console.log(dateTxtBool);
 });

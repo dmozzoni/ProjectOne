@@ -17,11 +17,15 @@
 
 <div class="fullPane" id="mainPane">
     <div id="title">
-        <h1>Butterfly Quiz</h1>
+
+        <button class = "menu ui-btn ui-icon-home ui-btn-icon-notext" id="homeButton" type="button">Home Screen</button>
+        <button class = "menu ui-btn ui-icon-gear ui-btn-icon-notext" id="settingButton" type="button">Settings</button>
+        <button class = "menu ui-btn ui-icon-audio ui-btn-icon-notext" id="replaytButton" type="button">Play Again</button>
+        <h1>RI Butterfly Quiz</h1>
+
     </div>
 
     <div id="photoPane">
-        <img src="#" alt="Butterfly">
         <div id="txtAnswer">Correct</div>
         <div class="hide" id="txtDate"></div>
     </div>
@@ -35,12 +39,10 @@
         <button class="answerButtons" id="button5">Button5</button>
 
         <div class="scoreBox">
-          Scores
+          <div>Score: <span id="score">0</span></div>
+          <div>Time:  <span id="time">0</span></div>
         </div>
 
-        <button id="settingButton" type="button" name="button">Settings</button>
-        <button id="homeButton" type="button" name="button">Home Screen</button>
-        <button id="replaytButton" type="button" name="button">Play Again</button>
     </div>
 </div>
 
@@ -50,18 +52,23 @@
        <button id="startButton">Start</button>
 </div>
 
-
 <div class="fullPane" id="propertiesPane">
-       <h1>Properties</h1>
+<div id='settingsPane'>
+       <h1>Settings</h1>
 
-       <div id="buttonBar"></div>
 
-       <fieldset data-role="controlgroup" data-type="horizontal">
+
+
+
+
+       <div id="fieldset">
+           <fieldset data-role="controlgroup" data-type="horizontal">
                 <legend>Which Butterfly families to include:</legend>
-       </fieldset>
+           </fieldset>
+           <h3>Available Questions: <span id="numAvailableQuestions">0</span></h3>
+       </div>
 
-
-
+<div id='sliders'>
        <!-- .slideThree -->
        <h5>Show Latin Names</h5>
        <div class="slideThree">
@@ -74,18 +81,19 @@
          <label for="checkDate"></label>
        </div>
        <!-- end .slideThree -->
-
        <form>
-         Quantity:
-         <input type="number" name="points" min="0" max="100" step="10" value="30">
+         Questions per Round:
+         <input id="qprInput" type="number" name="points" min="0" max="100" step="5" value="10">
        </form>
+
+  </div>
 
 
        <button id="propertiesButton">Done</button>
 
 
 
-
+</div>
 
 </div>
 
