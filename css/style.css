@@ -29,14 +29,15 @@ display: inline-block;
 
 #mainPane {
   background-color: gray;
-  height: 900px;
-  width: 1000px;
+  zzzzzheight: 900px;
+  zzzzzwidth: 1000px;
   text-align: center;
   display: none;
 }
 
 #welcomePane {
   zzzzzzzzzdisplay: none;
+  height: 700px;
   background-image: url('../img/rsp.jpg');
   background-size: contain;
   background-repeat: no-repeat;
@@ -127,6 +128,7 @@ img {
   border: 1 solid black;
   display:block;
   margin: 0 auto;
+  background-color: white;
 }
 
 #button1 {
