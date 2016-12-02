@@ -36,22 +36,65 @@ display: inline-block;
 }
 
 #welcomePane {
-  display: none;
-
+  zzzzzzzzzdisplay: none;
+  background-image: url('../img/rsp.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 #propertiesPane {
-
+display: none;
 }
 
 
 #photoPane {
+  position:relative; /* make this relative to have the inner div absolute without breaking out */
   float:left;
   margin : 0;
   width: 500px;
   height: 750px;
   background-color: green;
 }
+
+
+#txtAnswer {
+position: absolute;
+display: none;
+zzzzzzzzzzwidth: 400px;
+zzzzzzzzzzzzright: 0;
+top: 100px;
+left: 100px;
+zzzzzzzzbottom: 0;
+font-size: 5rem;
+font-weight: 600;
+color: rgba(255, 255, 255, 1);
+zzzzzzzzmargin: 0 auto;
+zzzzzzztransform: translateY(-500%);
+zzzzzzzzzmargin-top: -200px;
+color: white;
+text-shadow:
+-2px -2px 0 #000,
+2px -2px 0 #000,
+-2px 2px 0 #000,
+2px 2px 0 #000;
+}
+
+#txtDate {
+
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-size: 1.5rem;
+  font-weight: 200;
+  color: white;
+  background-color: rgba(0,0,0,.3);
+  padding: 0 2px;
+
+}
+.hide {
+  display: none;
+}
+
 #choicePane {
   float:left;
   text-align: center;
@@ -61,6 +104,7 @@ display: inline-block;
 }
 
 #settingsPane {
+display:none;
   float:left;
   text-align: center;
   width: 100px;
@@ -68,18 +112,40 @@ display: inline-block;
   background-color: yellow;
 }
 
+
+h1 {
+  margin-bottom: 0;
+}
+
 img {
   width:480px;
 }
 .answerButtons {
+
   width:150px;
   height: 75px;
   border: 1 solid black;
   display:block;
   margin: 0 auto;
 }
+
+#button1 {
+  border-radius: 15px 15px 0 0;
+}
+#button5 {
+  border-radius: 0 0 15px 15px;
+}
+
+
 .answerButtons:hover {
   background-color: darkgray;
+}
+.wrongAnswer{
+  background-color: red;
+  border: 1 solid red;
+}.correctAnswer{
+  background-color: green;
+  border: 1 solid green;
 }
 
 .buttonBar {

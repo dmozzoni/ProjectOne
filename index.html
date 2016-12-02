@@ -22,6 +22,8 @@
 
     <div id="photoPane">
         <img src="#" alt="Butterfly">
+        <div id="txtAnswer">Correct</div>
+        <div class="hide" id="txtDate"></div>
     </div>
 
     <div id="choicePane">
@@ -31,6 +33,14 @@
         <button class="answerButtons" id="button3">Button3</button>
         <button class="answerButtons" id="button4">Button4</button>
         <button class="answerButtons" id="button5">Button5</button>
+
+        <div class="scoreBox">
+          Scores
+        </div>
+
+        <button id="settingButton" type="button" name="button">Settings</button>
+        <button id="homeButton" type="button" name="button">Home Screen</button>
+        <button id="replaytButton" type="button" name="button">Play Again</button>
     </div>
 </div>
 
@@ -56,12 +66,12 @@
        <!-- .slideThree -->
        <h5>Show Latin Names</h5>
        <div class="slideThree">
-         <input type="checkbox" value="None" id="checkLatin" name="check" checked />
+         <input type="checkbox" value="None" id="checkLatin" name="check"  />
          <label for="checkLatin"></label>
        </div>
        <h5>Show Dates</h5>
        <div class="slideThree">
-         <input type="checkbox" value="None" id="checkDate" name="check" checked />
+         <input type="checkbox" value="None" id="checkDate" name="check"  />
          <label for="checkDate"></label>
        </div>
        <!-- end .slideThree -->

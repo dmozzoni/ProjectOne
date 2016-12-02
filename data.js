@@ -6,6 +6,55 @@ let fullImgSrcArray = [], fullDateArray = [];
 let dataFileSrc = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQpA97t0qk19B00C617SeAF2eKZSJURLlNsy9b_UfgvUxti3Bw6ymc365TfoXHpQNfg7LDxVAYO_6-s/pub?gid=0&single=true&output=csv";
 let index, current, working;
 let database = {};
+let dateTxtBool = false;
+
+function sleep(ms)
+{
+  var dt = new Date();
+  dt.setTime(dt.getTime() + ms);
+  while (new Date().getTime() < dt.getTime());
+}
+
+
+let timer = {
+
+    seconds: 0,
+    timerId: null,
+
+    updateTime() {
+      this.seconds++;
+      $("#timer").text("Time elapsed: "+this.seconds);
+    },
+
+    clickStart() {
+      this.timerId = setInterval(this.updateTime.bind(this), 1000);
+    },
+
+    clickPause() {
+      clearInterval(this.timerId);
+    },
+
+    clickReset() {
+      clearInterval(this.timerId);
+      this.seconds = 0;
+      $("#timer").text("Stop Watch");
+    },
+
+    go() {
+      $("#start").on("click", () => {this.clickStart();} );
+      $("#reset").on("click", () => {this.clickReset();} );
+      $("#pause").on("click", () => {this.clickPause();} );
+    }
+
+};
+
+
+
+
+
+
+
+
 
 function getUnique(inputArray) {
     let outputArray = [];
@@ -49,7 +98,8 @@ function loadDatabase() {
     //
     // } else {
 
-      d3.csv(dataFileSrc, function(data) {
+//    d3.csv(dataFileSrc, function(data) {
+      d3.csv("data.csv", function(data) {
 
         // localStorage.data = data;
         initGame(data);
@@ -74,14 +124,13 @@ let arrIndexToObj = function(index,obj) {
 };
 
 
-let fillChoiceRandom = function(current, array, num) {
+let fillChoiceRandom = function(answer, array, num) {
 
-    let tmp = getUnique(array)
-    let tmpp = tmp.filter(function(ii){
-        return ii !== current.commonName;
+    let tmp = getUnique(array).filter(function(ii){
+        return ii !== answer;
     });
 
-    return shuffle(tmpp).slice(0,num);
+    return shuffle(tmp).slice(0,num);
 }
 
 
@@ -90,16 +139,34 @@ let setupQuestion = function() {
     let choices = [];
     current = arrIndexToObj(index,working);
     let workComNamTmp = working.commonName.slice();
-    let tmp = fillChoiceRandom(current, workComNamTmp,4);
+    let tmp = fillChoiceRandom(current.commonName, workComNamTmp,4);
     tmp.push(current.commonName);
     choices = shuffle(tmp);
 
     $('img').attr("src", "img/"+current.imgSrc);
-    $('#button1').text(choices[0]);
-    $('#button2').text(choices[1]);
-    $('#button3').text(choices[2]);
-    $('#button4').text(choices[3]);
-    $('#button5').text(choices[4]);
+  //  if(dateTxtBool) {
+      $('#txtDate').eq(0).text(current.date);
+    //}
+
+
+
+    for(let i=0;i<$('.answerButtons').length;i++) {
+         $('.answerButtons')[i].disabled = false;
+         $('.answerButtons').eq(i).text(choices[i]);
+         $('.answerButtons').eq(i).removeClass("wrongAnswer");
+         $('.answerButtons').eq(i).removeClass("correctAnswer");
+
+    //     $('.answerButtons').eq(i).css("background-color","buttonface");
+
+      }
+
+
+
+    // $('#button1').text(choices[0]);
+    // $('#button2').text(choices[1]);
+    // $('#button3').text(choices[2]);
+    // $('#button4').text(choices[3]);
+    // $('#button5').text(choices[4]);
     index++;
 
 };
@@ -160,10 +227,16 @@ for (let i = 0; i<uniqueGroups.length; i++) {
 
 $('.answerButtons').on('click', function() {
     if($(this).text() == current.commonName) {
-        alert('Yes');
-        setupQuestion();
-      }
-        else {alert('No');}
+          $(this).toggleClass("correctAnswer");
+          $("#txtAnswer").fadeIn('slow', function() {
+              $("#txtAnswer").fadeOut('slow', function() {
+                  setupQuestion();
+              });
+          });
+    } else {
+          $(this)[0].disabled = true;
+          $(this).toggleClass("wrongAnswer");
+    }
 });
 
 
@@ -199,7 +272,14 @@ $(document).on('change', 'input', function(){
 
 });
 
+$('#checkDate').on('change', function(){
 
+      if($("#checkDate")[0].checked) {          $("#txtDate").toggleClass("hide");
+}
+      else {          $("#txtDate").toggleClass("hide");
+}
+console.log(dateTxtBool);
+});
 
 
 
@@ -216,7 +296,17 @@ $('#propertiesButton').on('click', function () {
 });
 
 
+$('#settingButton').on('click', function () {
+   $('#mainPane').fadeToggle('slow', function(){
+      $('#propertiesPane').fadeToggle('slow');
+   });
+});
 
+$('#homeButton').on('click', function () {
+   $('#mainPane').fadeToggle('slow', function(){
+      $('#welcomePane').fadeToggle('slow');
+   });
+});
 
 
 loadDatabase();
