@@ -13,14 +13,19 @@
 </head>
 <body>
 
-
+  <audio id="audioWrong">
+  	<source src="audio/wronganswer.mp3" type="audio/mpeg"></source>
+  </audio>
+  <audio id="audioRight">
+  	<source id="audioRight" src="audio/335908__littlerainyseasons__correct.mp3" type="audio/mpeg"></source>
+  </audio>
 
 <div class="fullPane" id="mainPane">
     <div id="title">
 
-        <button class = "menu ui-btn ui-icon-home ui-btn-icon-notext" id="homeButton" type="button">Home Screen</button>
-        <button class = "menu ui-btn ui-icon-gear ui-btn-icon-notext" id="settingButton" type="button">Settings</button>
-        <button class = "menu ui-btn ui-icon-audio ui-btn-icon-notext" id="replaytButton" type="button">Play Again</button>
+        <button class = "menu ui-btn ui-icon-home ui-btn-icon-notext" id="homeButton" type="button"></button>
+        <button class = "menu ui-btn ui-icon-gear ui-btn-icon-notext" id="settingButton" type="button"></button>
+        <button class = "menu ui-btn ui-icon-audio ui-btn-icon-notext" id="audioButton" type="button"></button>
         <h1>RI Butterfly Quiz</h1>
 
     </div>
@@ -85,15 +90,22 @@
       <div class="ppp">
         <h5>Show Latin Names</h5>
         <div class="slideThree">
-          <input type="checkbox" value="None" id="checkLatin" name="check"  />
+          <input type="checkbox" value="None" id="checkLatin" name="check" />
           <label for="checkLatin"></label>
         </div>
       </div>
 <div class="ppp">
   <h5>Show Dates</h5>
   <div class="slideThree">
-    <input type="checkbox" value="None" id="checkDate" name="check"  />
+    <input type="checkbox" value="None" id="checkDate" name="check" />
     <label for="checkDate"></label>
+  </div>
+</div>
+<div class="ppp">
+  <h5>Sound Effects</h5>
+  <div class="slideThree">
+    <input type="checkbox" value="None" id="checkSound" name="check" checked />
+    <label for="checkSound"></label>
   </div>
 </div>
 <div class="ppp">

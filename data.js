@@ -4,25 +4,20 @@ let databaseSize;
 let fullGroupTypeArray = [], fullCommonNameArray = [], fullLatinNameArray = [];
 let fullImgSrcArray = [], fullDateArray = [];
 let dataFileSrc = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQpA97t0qk19B00C617SeAF2eKZSJURLlNsy9b_UfgvUxti3Bw6ymc365TfoXHpQNfg7LDxVAYO_6-s/pub?gid=0&single=true&output=csv";
-let jsonSource = "https://api.myjson.com/bins/32q8f"
-let index, current, working;
+let jsonSource = "https://api.myjson.com/bins/32q8f";
+let current, working;
 let database = {};
 let dateTxtBool = false;
-
+let indexArray = [];
 let scoreVals = [10,6,3,1,0];
 let numGuesses = 0;
 let scoreTotal = 0;
 let numPerRound = 2;
 let roundIndex = -1;
+let playAudio = true;
+let diffHard = true;
 
 let highscore = [];
-
-
-
-
-
-
-
 
 
 
@@ -32,7 +27,7 @@ var by = function (path, reverse, primer, then) {
                 path = path.split('.');
                 for (var i = 0, len = path.length - 1; i < len; i++) {
                     obj = obj[path[i]];
-                };
+                }
                 return obj[path[len]];
             }
             return obj;
@@ -161,16 +156,16 @@ function loadDatabase() {
 
 
      highscore = [
-       {"user":"cyric", "score":"100","time":"200"},
-       {"user":"dave", "score":"343","time":"250"},
-       {"user":"mary", "score":"2","time":"300"},
-       {"user":"dan", "score":"231","time":"350"},
-       {"user":"sue", "score":"765","time":"400"},
-       {"user":"kyle", "score":"213","time":"450"},
-       {"user":"tracy", "score":"500","time":"100"},
-       {"user":"marie", "score":"500","time":"102"},
-       {"user":"carol", "score":"500","time":"101"},
-       {"user":"ryan", "score":"1","time":"650"}
+       {"user":"Rand al'Thor",      "score":"50", "time":"100"},
+       {"user":"Egwene al'Vere",    "score":"45", "time":"100"},
+       {"user":"Matrim Cauthon",    "score":"40", "time":"100"},
+       {"user":"Moiraine Damodred", "score":"35", "time":"100"},
+       {"user":"Perrin Aybara",     "score":"30", "time":"100"},
+       {"user":"Nynaeve al'Meara",  "score":"25", "time":"100"},
+       {"user":"Lan Mandragoran",   "score":"20", "time":"100"},
+       {"user":"Elayne Trakand",    "score":"15", "time":"100"},
+       {"user":"Thom Merrilin",     "score":"10", "time":"100"},
+       {"user":"Siuan Sanche",      "score":"5",  "time":"100"}
      ];
 
      highscore.sort( by('score', true, parseFloat, by('time',false, parseFloat)));
@@ -220,6 +215,8 @@ let startRound = function() {
     if(!timer.running) {
         timer.clickReset();
         timer.clickStart();
+        scoreTotal = 0;
+        $('#score').text(scoreTotal);
     }
     roundIndex++;
 
@@ -242,14 +239,11 @@ let startRound = function() {
           $("#highscoreForm").toggleClass("hide");
         }
 
-
-
-
-
-
     }
 
 };
+
+
 
 $('#highscoreForm').on('submit', function(e){
   e.preventDefault();
@@ -259,8 +253,6 @@ $('#highscoreForm').on('submit', function(e){
   if ((scoreTotal > highscore[9].score) || ((scoreTotal === highscore[0]) && (timer.seconds <= highscore.time))) {
       highscore.pop();
       highscore.push({"user":input,"score":scoreTotal,"time":timer.seconds});
-      scoreTotal = 0;
-      $('#score').text(scoreTotal);
   }
 
   populateHighscoreTable();
@@ -268,15 +260,26 @@ $('#highscoreForm').on('submit', function(e){
   $("#highscoreForm").toggleClass("hide");
 });
 
-
-
+let createIndexArray = function(size) {
+   indexArray = [];
+   for(let i = 0; i<size;i++) { indexArray.push(i); }
+   return indexArray;
+};
 
 let setupQuestion = function() {
 
-    let choices = [];
+    let choices = [], workComNamTmp = [];
     numGuesses = 0;
-    current = arrIndexToObj(roundIndex,working);
-    let workComNamTmp = working.commonName.slice();
+
+    current = arrIndexToObj(indexArray[0],working);
+    indexArray.push(indexArray.shift());
+
+if (!diffHard) {
+     workComNamTmp = working.commonName.slice();
+  } else {
+     workComNamTmp = database[current.groupType].commonName.slice();
+  }
+
     let tmp = fillChoiceRandom(current.commonName, workComNamTmp,4);
     tmp.push(current.commonName);
     choices = shuffle(tmp);
@@ -290,7 +293,7 @@ let setupQuestion = function() {
          $('.answerButtons').eq(i).removeClass("wrongAnswer");
          $('.answerButtons').eq(i).removeClass("correctAnswer");
     }
-    index++;
+//    index++;
 };
 
 
@@ -333,6 +336,7 @@ for (let i = 0; i<uniqueGroups.length; i++) {
 }
 
   working = jQuery.extend(true, {}, database.full); //copy object by value
+  indexArray = shuffle(createIndexArray(working.commonName.length));
 
   // for (let i = 0; i<$(".subgrps").length;i++) {
   //      num += database[$(".subgrps")[i].value].commonName.length;
@@ -345,6 +349,7 @@ $('#numAvailableQuestions').text(database.full.date.length);
 $('.answerButtons').on('click', function() {
     if($(this).text() == current.commonName) {
           $(this).toggleClass("correctAnswer");
+          if(playAudio) {$('#audioRight')[0].play();}
           scoreTotal += scoreVals[numGuesses]
           $('#score').text(scoreTotal);
           $("#txtAnswer").fadeIn('slow', function() {
@@ -356,6 +361,7 @@ $('.answerButtons').on('click', function() {
     } else {
           $(this)[0].disabled = true;
           numGuesses++;
+          if(playAudio) {$('#audioWrong')[0].play();}
           $(this).toggleClass("wrongAnswer");
     }
 });
@@ -375,7 +381,9 @@ $('#propertiesButton').on('click', function() {
             working.imgSrc = working.imgSrc.concat(database[$('.subgrps')[i].value].imgSrc);
         }
     }
-    index = 0;
+    indexArray = shuffle(createIndexArray(working.commonName.length));
+
+//    index = 0;
     setupQuestion();
 
 });
@@ -404,7 +412,19 @@ $('#checkDate').on('change', function(){
       else {$("#txtDate").toggleClass("hide");}
 });
 
+$('#checkSound').on('change', function(){
+      if($("#checkSound")[0].checked) { playAudio = true; }
+      else { playAudio = false; }
+});
 
+
+$('#audioButton').on('click', function () {
+   if($("#checkSound")[0].checked) { playAudio = false;
+     $("#checkSound")[0].checked = false; }
+   else { playAudio = true;
+     $("#checkSound")[0].checked = true;
+}
+});
 
 $('#startButton').on('click', function () {
    $('#welcomePane').fadeToggle('slow', function(){
