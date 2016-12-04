@@ -10,6 +10,7 @@ let database = {};
 let dateTxtBool = false;
 let indexArray = [];
 let scoreVals = [10,6,3,1,0];
+let scoreValsHard = [15,9,5,2,0];
 let numGuesses = 0;
 let scoreTotal = 0;
 let numPerRound = 2;
@@ -350,12 +351,12 @@ $('.answerButtons').on('click', function() {
     if($(this).text() == current.commonName) {
           $(this).toggleClass("correctAnswer");
           if(playAudio) {$('#audioRight')[0].play();}
-          scoreTotal += scoreVals[numGuesses]
+          if(diffHard) { scoreTotal += scoreValsHard[numGuesses]; }
+          else { scoreTotal += scoreVals[numGuesses]; }
           $('#score').text(scoreTotal);
           $("#txtAnswer").fadeIn('slow', function() {
               $("#txtAnswer").fadeOut('slow', function() {
                 startRound();
-//                setupQuestion();
               });
           });
     } else {
@@ -457,5 +458,35 @@ $('#highscoreButton').on('click', function () {
       $('#welcomePane').fadeToggle('slow');
    });
 });
+
+$('#settingButtonWelcome').on('click', function () {
+   $('#welcomePane').fadeToggle('slow', function(){
+      $('#propertiesPane').fadeToggle('slow');
+   });
+});
+
+$('#audioButtonWelcome').on('click', function () {
+   if($("#checkSound")[0].checked) { playAudio = false;
+     $("#checkSound")[0].checked = false; }
+   else { playAudio = true;
+     $("#checkSound")[0].checked = true;
+}
+});
+
+$('#highscoreButtonWelcome').on('click', function () {
+   $('#welcomePane').fadeToggle('slow', function(){
+      $('#scorePane').fadeToggle('slow');
+   });
+});
+
+
+
+//
+// <button class = "menu ui-btn ui-icon-gear ui-btn-icon-notext"  id="settingButtonWelcome" type="button"></button>
+// <button class = "menu ui-btn ui-icon-user ui-btn-icon-notext"  id="highscoreButtonWelcome" type="button"></button>
+// <button class = "menu ui-btn ui-icon-audio ui-btn-icon-notext" id="audioButtonWelcome" type="button"></button>
+//
+
+
 
 loadDatabase();

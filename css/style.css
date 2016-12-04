@@ -1,3 +1,4 @@
+
 body {
   text-align: center;
 }
@@ -72,8 +73,14 @@ font-weight: bold;
 }
 .menu {
   float: right;
-
+  /* opacity: .5; */
+  /* color: rgba(0,0,0,.2); */
+  /* color: red; */
+  background-color: rgba(0,0,0,0);
+  border-width: 0;
 }
+
+
 #photoPane {
   position:relative; /* make this relative to have the inner div absolute without breaking out */
   float:left;
@@ -169,7 +176,7 @@ font-size: 25px;
 }
 .formbox input {
   text-align: center;
-} 
+}
 
 table {
     font-family: arial, sans-serif;
@@ -368,3 +375,17 @@ zzzzdisplay: inline-block;
 
 
 /* end .slideThree */
+
+#welcomeH1 {
+  margin-left: 60px;
+  margin-top: 20px;
+}
+
+button.ui-btn-icon-notext, .ui-controlgroup-horizontal .ui-controlgroup-controls button.ui-btn {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    width: 1.75em;
+    border-width: 0;
+
+}
