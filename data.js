@@ -4,6 +4,7 @@ let databaseSize;
 let fullGroupTypeArray = [], fullCommonNameArray = [], fullLatinNameArray = [];
 let fullImgSrcArray = [], fullDateArray = [];
 let dataFileSrc = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQpA97t0qk19B00C617SeAF2eKZSJURLlNsy9b_UfgvUxti3Bw6ymc365TfoXHpQNfg7LDxVAYO_6-s/pub?gid=0&single=true&output=csv";
+let jsonSource = "https://api.myjson.com/bins/32q8f"
 let index, current, working;
 let database = {};
 let dateTxtBool = false;
@@ -11,10 +12,55 @@ let dateTxtBool = false;
 let scoreVals = [10,6,3,1,0];
 let numGuesses = 0;
 let scoreTotal = 0;
+let numPerRound = 2;
+let roundIndex = -1;
+
+let highscore = [];
 
 
-function sleep(ms)
-{
+
+
+
+
+
+
+
+
+var by = function (path, reverse, primer, then) {
+    var get = function (obj, path) {
+            if (path) {
+                path = path.split('.');
+                for (var i = 0, len = path.length - 1; i < len; i++) {
+                    obj = obj[path[i]];
+                };
+                return obj[path[len]];
+            }
+            return obj;
+        },
+        prime = function (obj) {
+            return primer ? primer(get(obj, path)) : get(obj, path);
+        };
+
+    return function (a, b) {
+        var A = prime(a),
+            B = prime(b);
+
+        return (
+            (A < B) ? -1 :
+            (A > B) ?  1 :
+            (typeof then === 'function') ? then(a, b) : 0
+        ) * [1,-1][+!!reverse];
+    };
+};
+
+
+
+
+
+
+
+
+function sleep(ms) {
   var dt = new Date();
   dt.setTime(dt.getTime() + ms);
   while (new Date().getTime() < dt.getTime());
@@ -25,24 +71,30 @@ let timer = {
 
     seconds: 0,
     timerId: null,
+    running: false,
 
     updateTime() {
       this.seconds++;
-      $("#timer").text("Time elapsed: "+this.seconds);
+//      $("#timer").text("Time elapsed: "+this.seconds);
+      $("#timer").text(this.seconds);
     },
 
     clickStart() {
       this.timerId = setInterval(this.updateTime.bind(this), 1000);
+      this.running = true;
     },
 
     clickPause() {
       clearInterval(this.timerId);
+      this.running = false;
     },
 
     clickReset() {
       clearInterval(this.timerId);
       this.seconds = 0;
-      $("#timer").text("Stop Watch");
+      this.running = false;
+//      $("#timer").text("Stop Watch");
+      $("#timer").text("0");
     },
 
     go() {
@@ -52,13 +104,6 @@ let timer = {
     }
 
 };
-
-
-
-
-
-
-
 
 
 function getUnique(inputArray) {
@@ -88,7 +133,6 @@ function shuffle(array) { // Ripped from StackOverflow
         array[counter] = array[index];
         array[index] = temp;
     }
-
     return array;
 }
 
@@ -96,27 +140,57 @@ function shuffle(array) { // Ripped from StackOverflow
 
 function loadDatabase() {
 
-    // if(localStorage.data) {
-    //
-    //   initGame(localStorage.data);
-    //
-    //
-    // } else {
 
 //    d3.csv(dataFileSrc, function(data) {
-//      d3.csv("data.csv", function(data) {
-        d3.csv("http://localhost:8000/data.csv", function(data) {
+      d3.csv("data.csv", function(data) {
+//    d3.csv("http://localhost:8000/data.csv", function(data) {
 
-        // localStorage.data = data;
         initGame(data);
 
       });
 
+      // $.ajax({
+      //     url: "https://api.myjson.com/bins/32q8f",
+      //     type: "GET",
+      //     dataType: "json"
+      // }).done(function(response){
+      //     highscore = response
+      // }).fail(function (){
+      //     alert ("Failed to retrieve a Highscores...");
+      // });
 
-    // }
+
+     highscore = [
+       {"user":"cyric", "score":"100","time":"200"},
+       {"user":"dave", "score":"343","time":"250"},
+       {"user":"mary", "score":"2","time":"300"},
+       {"user":"dan", "score":"231","time":"350"},
+       {"user":"sue", "score":"765","time":"400"},
+       {"user":"kyle", "score":"213","time":"450"},
+       {"user":"tracy", "score":"500","time":"100"},
+       {"user":"marie", "score":"500","time":"102"},
+       {"user":"carol", "score":"500","time":"101"},
+       {"user":"ryan", "score":"1","time":"650"}
+     ];
+
+     highscore.sort( by('score', true, parseFloat, by('time',false, parseFloat)));
 
 
     }
+
+
+let populateHighscoreTable = function() {
+
+   highscore.sort( by('score', true, parseFloat, by('time',true, parseFloat)));
+
+   let t3 = document.getElementById('highscoreTable');
+   t3.innerHTML = '<tr><th> User </th><th> Score </th><th> Time </th></tr>';
+   for (let i = 0; i < highscore.length; i++) {
+       t3.innerHTML += '<tr><td>' + highscore[i].user + '</td><td>' + highscore[i].score + '</td><td> ' + highscore[i].time + '</td></tr>';
+   }
+
+}
+
 
 
 let arrIndexToObj = function(index,obj) {
@@ -140,47 +214,83 @@ let fillChoiceRandom = function(answer, array, num) {
 }
 
 
+
+let startRound = function() {
+
+    if(!timer.running) {
+        timer.clickReset();
+        timer.clickStart();
+    }
+    roundIndex++;
+
+    if(roundIndex < numPerRound) {
+        setupQuestion();
+    } else {
+        timer.clickPause();
+        roundIndex = -1;
+    //    alert("Round complete in: " + timer.seconds + "with a score of: " + scoreTotal);
+
+        $('#mainPane').fadeToggle('slow', function(){
+            $('#scorePane').fadeToggle('slow');
+        });
+
+        $("#highscoreNote").text('You Scored: '+ scoreTotal + ' points in a time of: ' + timer.seconds + ' seconds');
+        populateHighscoreTable();
+
+        if ((scoreTotal > highscore[9].score) || ((scoreTotal === highscore[0]) && (timer.seconds <= highscore.time))) {
+          $("#highscoreNote2").toggleClass("hide");
+          $("#highscoreForm").toggleClass("hide");
+        }
+
+
+
+
+
+
+    }
+
+};
+
+$('#highscoreForm').on('submit', function(e){
+  e.preventDefault();
+  let input = $('#user-field').eq(0).val();
+  if (input==='') { input = 'Anonymous';}
+
+  if ((scoreTotal > highscore[9].score) || ((scoreTotal === highscore[0]) && (timer.seconds <= highscore.time))) {
+      highscore.pop();
+      highscore.push({"user":input,"score":scoreTotal,"time":timer.seconds});
+      scoreTotal = 0;
+      $('#score').text(scoreTotal);
+  }
+
+  populateHighscoreTable();
+  $("#highscoreNote2").toggleClass("hide");
+  $("#highscoreForm").toggleClass("hide");
+});
+
+
+
+
 let setupQuestion = function() {
 
     let choices = [];
     numGuesses = 0;
-    current = arrIndexToObj(index,working);
+    current = arrIndexToObj(roundIndex,working);
     let workComNamTmp = working.commonName.slice();
     let tmp = fillChoiceRandom(current.commonName, workComNamTmp,4);
     tmp.push(current.commonName);
     choices = shuffle(tmp);
 
-//    $('img').attr("src", "img/"+current.imgSrc);
-$('#photoPane').css('background-image','url(' + 'img/'+current.imgSrc+')')
-//$('#photoPane').css('background-image','img/'+current.imgSrc)
-//background-image: url('../img/rsp.jpg');
-
-
-  //  if(dateTxtBool) {
-      $('#txtDate').eq(0).text(current.date);
-    //}
-
-
+    $('#photoPane').css('background-image','url(' + 'img/'+current.imgSrc+')');
+    $('#txtDate').eq(0).text(current.date);
 
     for(let i=0;i<$('.answerButtons').length;i++) {
          $('.answerButtons')[i].disabled = false;
          $('.answerButtons').eq(i).text(choices[i]);
          $('.answerButtons').eq(i).removeClass("wrongAnswer");
          $('.answerButtons').eq(i).removeClass("correctAnswer");
-
-    //     $('.answerButtons').eq(i).css("background-color","buttonface");
-
-      }
-
-
-
-    // $('#button1').text(choices[0]);
-    // $('#button2').text(choices[1]);
-    // $('#button3').text(choices[2]);
-    // $('#button4').text(choices[3]);
-    // $('#button5').text(choices[4]);
+    }
     index++;
-
 };
 
 
@@ -200,21 +310,14 @@ function initGame(data) {
   let uniqueGroups = getUnique(fullGroupTypeArray);
 
   for (let i=0;i<uniqueGroups.length;i++) {
-
       $("fieldset").append('<label>' + uniqueGroups[i] +'</label>');
       $("fieldset").append('<input type="checkbox" class="subgrps" checked=true value="' + uniqueGroups[i] +'"><br>');
-
       database[uniqueGroups[i]] = { commonName: [], date: [], groupType: [], imgSrc: [], latinName: [] };
-
   }
 
-   database["full"] = {
-     commonName: fullCommonNameArray,
-     date: fullDateArray,
-     groupType: fullGroupTypeArray,
-     imgSrc: fullImgSrcArray,
-     latinName: fullLatinNameArray
-  };
+   database["full"] = { commonName: fullCommonNameArray, date: fullDateArray,
+     groupType: fullGroupTypeArray, imgSrc: fullImgSrcArray, latinName: fullLatinNameArray
+   };
 
 
 for (let i = 0; i<uniqueGroups.length; i++) {
@@ -236,10 +339,6 @@ for (let i = 0; i<uniqueGroups.length; i++) {
   // }
 $('#numAvailableQuestions').text(database.full.date.length);
 
-
-  index = 0;
-  setupQuestion();
-
 }
 
 
@@ -250,7 +349,8 @@ $('.answerButtons').on('click', function() {
           $('#score').text(scoreTotal);
           $("#txtAnswer").fadeIn('slow', function() {
               $("#txtAnswer").fadeOut('slow', function() {
-                  setupQuestion();
+                startRound();
+//                setupQuestion();
               });
           });
     } else {
@@ -286,35 +386,22 @@ $(document).on('change', '.subgrps', function(){
      let num=0;
 
       for (let i = 0; i<$(".subgrps").length;i++) {
-  //     console.log(database[$(".subgrps")[i].value].commonName.length);
-
          if ($(".subgrps")[i].checked) {
            num += database[$(".subgrps")[i].value].commonName.length;
            allUnchecked = false;
          }
       }
 
-
-
       if(allUnchecked) {$('#propertiesButton')[0].disabled=true;}
       else {$('#propertiesButton')[0].disabled=false;}
 
-
-
-
-
       $('#numAvailableQuestions').text(num);
-
 
 });
 
 $('#checkDate').on('change', function(){
-
-      if($("#checkDate")[0].checked) {$("#txtDate").toggleClass("hide");
-}
-      else {$("#txtDate").toggleClass("hide");
-}
-console.log(dateTxtBool);
+      if($("#checkDate")[0].checked) { $("#txtDate").toggleClass("hide"); }
+      else {$("#txtDate").toggleClass("hide");}
 });
 
 
@@ -322,6 +409,7 @@ console.log(dateTxtBool);
 $('#startButton').on('click', function () {
    $('#welcomePane').fadeToggle('slow', function(){
       $('#mainPane').fadeToggle('slow');
+      startRound();
    });
 });
 
@@ -344,5 +432,10 @@ $('#homeButton').on('click', function () {
    });
 });
 
+$('#highscoreButton').on('click', function () {
+   $('#scorePane').fadeToggle('slow', function(){
+      $('#welcomePane').fadeToggle('slow');
+   });
+});
 
 loadDatabase();

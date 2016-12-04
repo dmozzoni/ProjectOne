@@ -40,7 +40,7 @@
 
         <div class="scoreBox">
           <div>Score: <span id="score">0</span></div>
-          <div>Time:  <span id="time">0</span></div>
+          <div>Time:  <span id="timer">0</span></div>
         </div>
 
     </div>
@@ -52,46 +52,61 @@
        <button id="startButton">Start</button>
 </div>
 
+<div class="fullPane" id="scorePane">
+       <h1>Highscore List</h1>
+       <h2 id="highscoreNote"></h2>
+    <div class="formbox">
+       <h2 class="hide" id="highscoreNote2"></h2>
+       <form class="hide" id="highscoreForm">
+         <input type="text" id="user-field" maxlength="20" autofocus placeholder="Anonymous"></input>
+         <button id="set-user">Submit Highscore</button>
+       </form>
+    </div>
+
+       <table id="highscoreTable"></table>
+       <button id="highscoreButton">Home</button>
+</div>
+
 <div class="fullPane" id="propertiesPane">
 <div id='settingsPane'>
        <h1>Settings</h1>
-
-
-
-
-
 
        <div id="fieldset">
            <fieldset data-role="controlgroup" data-type="horizontal">
                 <legend>Which Butterfly families to include:</legend>
            </fieldset>
            <h3>Available Questions: <span id="numAvailableQuestions">0</span></h3>
+           <h5>Questions per Round:
+             <input id="qprInput" type="number" name="points" min="0" max="100" step="5" value="10">
+           </h5>
        </div>
 
 <div id='sliders'>
-       <!-- .slideThree -->
-       <h5>Show Latin Names</h5>
-       <div class="slideThree">
-         <input type="checkbox" value="None" id="checkLatin" name="check"  />
-         <label for="checkLatin"></label>
-       </div>
-       <h5>Show Dates</h5>
-       <div class="slideThree">
-         <input type="checkbox" value="None" id="checkDate" name="check"  />
-         <label for="checkDate"></label>
-       </div>
-       <!-- end .slideThree -->
-       <form>
-         Questions per Round:
-         <input id="qprInput" type="number" name="points" min="0" max="100" step="5" value="10">
-       </form>
+      <div class="ppp">
+        <h5>Show Latin Names</h5>
+        <div class="slideThree">
+          <input type="checkbox" value="None" id="checkLatin" name="check"  />
+          <label for="checkLatin"></label>
+        </div>
+      </div>
+<div class="ppp">
+  <h5>Show Dates</h5>
+  <div class="slideThree">
+    <input type="checkbox" value="None" id="checkDate" name="check"  />
+    <label for="checkDate"></label>
+  </div>
+</div>
+<div class="ppp">
+  <h5>Difficulty</h5>
+  <div class="slideThree2">
+    <input type="checkbox" value="None" id="checkDiff" name="check" checked />
+    <label for="checkDiff"></label>
+  </div>
+</div>
 
   </div>
 
-
        <button id="propertiesButton">Done</button>
-
-
 
 </div>
 

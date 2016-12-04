@@ -24,7 +24,7 @@ img {
 
 
 #welcomePane {
-  display: none;
+  zzzdisplay: none;
   height: 600px;
   width: 900px;
   background-image: url('../img/rsp.jpg');
@@ -63,9 +63,8 @@ font-weight: bold;
   margin: 0 auto;
   background-color: gray;
   text-align: center;
-  zzzdisplay: none;
+  display: none;
 }
-
 #title {
   display:block;
   background-color: orange;
@@ -75,10 +74,6 @@ font-weight: bold;
   float: right;
 
 }
-
-
-
-
 #photoPane {
   position:relative; /* make this relative to have the inner div absolute without breaking out */
   float:left;
@@ -90,10 +85,7 @@ font-weight: bold;
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: local;
-
-
 }
-
 #txtAnswer {
 position: relative;;
 display: none;
@@ -109,7 +101,6 @@ text-shadow:
 -2px 2px 0 #000,
 2px 2px 0 #000;
 }
-
 #txtDate {
   position: absolute;
   top: 10px;
@@ -119,12 +110,10 @@ text-shadow:
   color: white;
   background-color: rgba(0,0,0,.3);
   padding: 0 2px;
-
 }
 .hide {
   display: none;
 }
-
 #choicePane {
   float:left;
   text-align: center;
@@ -167,6 +156,42 @@ font-size: 25px;
 
 
 
+#scorePane {
+  display: none;
+  height: 640px;
+  width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: lightgreen;
+}
+.formbox {
+  height: 30px;
+}
+.formbox input {
+  text-align: center;
+} 
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 75%;
+    margin: 10px auto;
+    text-align: center;
+}
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+/*#highscoreForm {
+  display: none;
+}
+#highscoreNote2 {
+  display:none;
+}*/
 
 #propertiesPane {
 display: none;
@@ -227,6 +252,14 @@ fieldset legend {
   margin-left: 20px;
 }
 
+#sliders {
+
+zzzzdisplay: inline-block;
+}
+
+.ppp {
+  display: inline-block;
+}
 
 /* .slideThree */
 .slideThree {
@@ -280,5 +313,58 @@ fieldset legend {
 .slideThree input[type=checkbox]:checked + label {
   left: 43px;
 }
+
+.slideThree2 {
+  width: 103px;
+  height: 26px;
+  background: #333;
+  margin: 20px auto;
+  position: relative;
+  border-radius: 50px;
+  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+}
+.slideThree2:after {
+  content: 'HARD';
+  color: #000;
+  position: absolute;
+  right: 10px;
+  z-index: 0;
+  font: 12px/26px Arial, sans-serif;
+  font-weight: bold;
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15);
+}
+.slideThree2:before {
+  content: 'EASY';
+  color: #27ae60;
+  position: absolute;
+  left: 10px;
+  z-index: 0;
+  font: 12px/26px Arial, sans-serif;
+  font-weight: bold;
+}
+.slideThree2 label {
+  display: block;
+  width: 50px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  z-index: 1;
+  background: #fcfff4;
+  background: -webkit-linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  background: linear-gradient(to bottom, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  border-radius: 50px;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+}
+.slideThree2 input[type=checkbox] {
+  visibility: hidden;
+}
+.slideThree2 input[type=checkbox]:checked + label {
+  left: 50px;
+}
+
 
 /* end .slideThree */
