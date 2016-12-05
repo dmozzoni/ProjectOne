@@ -13,16 +13,16 @@ let scoreVals = [10,6,3,1,0];
 let scoreValsHard = [15,9,5,2,0];
 let numGuesses = 0;
 let scoreTotal = 0;
-let numPerRound = 2;
+let numPerRound = 10;
 let roundIndex = -1;
 let playAudio = true;
-let diffHard = true;
-
+let diffHard = false;
+let highscoreJson;
 let highscore = [];
 
 
 
-var by = function (path, reverse, primer, then) {
+var by = function (path, reverse, primer, then) {  // from StackOverflow
     var get = function (obj, path) {
             if (path) {
                 path = path.split('.');
@@ -50,19 +50,6 @@ var by = function (path, reverse, primer, then) {
 };
 
 
-
-
-
-
-
-
-function sleep(ms) {
-  var dt = new Date();
-  dt.setTime(dt.getTime() + ms);
-  while (new Date().getTime() < dt.getTime());
-}
-
-
 let timer = {
 
     seconds: 0,
@@ -71,7 +58,6 @@ let timer = {
 
     updateTime() {
       this.seconds++;
-//      $("#timer").text("Time elapsed: "+this.seconds);
       $("#timer").text(this.seconds);
     },
 
@@ -89,7 +75,6 @@ let timer = {
       clearInterval(this.timerId);
       this.seconds = 0;
       this.running = false;
-//      $("#timer").text("Stop Watch");
       $("#timer").text("0");
     },
 
@@ -133,46 +118,42 @@ function shuffle(array) { // Ripped from StackOverflow
 }
 
 
-
 function loadDatabase() {
 
+       d3.csv(dataFileSrc, function(data) {
+//       d3.csv("data.csv", function(data) {
+//       d3.csv("http://localhost:8000/data.csv", function(data) {
+            initGame(data);
+       });
 
-//    d3.csv(dataFileSrc, function(data) {
-      d3.csv("data.csv", function(data) {
-//    d3.csv("http://localhost:8000/data.csv", function(data) {
+       $.ajax({
+           url: jsonSource,
+           type: "GET",
+           dataType: "json"
+       }).done(function(response){
+           highscore = response;
+//           console.log('Ajax - loadDatabase: Retrieved Highscores...');
+           highscore.sort( by('score', true, parseFloat, by('time',false, parseFloat)));
+           populateHighscoreTable();
+       }).fail(function (){
+           console.log("Failed to retrieve Highscores... Using default...");
+           highscore = [
+             {"user":"Rand al'Thor",      "score":"50", "time":"100"},
+             {"user":"Egwene al'Vere",    "score":"45", "time":"100"},
+             {"user":"Matrim Cauthon",    "score":"40", "time":"100"},
+             {"user":"Moiraine Damodred", "score":"35", "time":"100"},
+             {"user":"Perrin Aybara",     "score":"30", "time":"100"},
+             {"user":"Nynaeve al'Meara",  "score":"25", "time":"100"},
+             {"user":"Lan Mandragoran",   "score":"20", "time":"100"},
+             {"user":"Elayne Trakand",    "score":"15", "time":"100"},
+             {"user":"Thom Merrilin",     "score":"10", "time":"100"},
+             {"user":"Siuan Sanche",      "score":"5",  "time":"100"}
+           ];
+           highscore.sort( by('score', true, parseFloat, by('time',false, parseFloat)));
+           populateHighscoreTable();
+       });
 
-        initGame(data);
-
-      });
-
-      // $.ajax({
-      //     url: "https://api.myjson.com/bins/32q8f",
-      //     type: "GET",
-      //     dataType: "json"
-      // }).done(function(response){
-      //     highscore = response
-      // }).fail(function (){
-      //     alert ("Failed to retrieve a Highscores...");
-      // });
-
-
-     highscore = [
-       {"user":"Rand al'Thor",      "score":"50", "time":"100"},
-       {"user":"Egwene al'Vere",    "score":"45", "time":"100"},
-       {"user":"Matrim Cauthon",    "score":"40", "time":"100"},
-       {"user":"Moiraine Damodred", "score":"35", "time":"100"},
-       {"user":"Perrin Aybara",     "score":"30", "time":"100"},
-       {"user":"Nynaeve al'Meara",  "score":"25", "time":"100"},
-       {"user":"Lan Mandragoran",   "score":"20", "time":"100"},
-       {"user":"Elayne Trakand",    "score":"15", "time":"100"},
-       {"user":"Thom Merrilin",     "score":"10", "time":"100"},
-       {"user":"Siuan Sanche",      "score":"5",  "time":"100"}
-     ];
-
-     highscore.sort( by('score', true, parseFloat, by('time',false, parseFloat)));
-
-
-    }
+}
 
 
 let populateHighscoreTable = function() {
@@ -184,8 +165,7 @@ let populateHighscoreTable = function() {
    for (let i = 0; i < highscore.length; i++) {
        t3.innerHTML += '<tr><td>' + highscore[i].user + '</td><td>' + highscore[i].score + '</td><td> ' + highscore[i].time + '</td></tr>';
    }
-
-}
+};
 
 
 
@@ -201,11 +181,9 @@ let arrIndexToObj = function(index,obj) {
 
 
 let fillChoiceRandom = function(answer, array, num) {
-
     let tmp = getUnique(array).filter(function(ii){
         return ii !== answer;
     });
-
     return shuffle(tmp).slice(0,num);
 }
 
@@ -226,22 +204,38 @@ let startRound = function() {
     } else {
         timer.clickPause();
         roundIndex = -1;
-    //    alert("Round complete in: " + timer.seconds + "with a score of: " + scoreTotal);
 
         $('#mainPane').fadeToggle('slow', function(){
             $('#scorePane').fadeToggle('slow');
         });
 
-        $("#highscoreNote").text('You Scored: '+ scoreTotal + ' points in a time of: ' + timer.seconds + ' seconds');
-        populateHighscoreTable();
+        $("#highscoreNote").text('You Scored: '+ scoreTotal + ' points in a time of: ' + timer.seconds + ' seconds.');
 
-        if ((scoreTotal > highscore[9].score) || ((scoreTotal === highscore[0]) && (timer.seconds <= highscore.time))) {
-          $("#highscoreNote2").toggleClass("hide");
-          $("#highscoreForm").toggleClass("hide");
-        }
 
+
+
+        $.ajax({
+            url: jsonSource,
+            type: "GET",
+            dataType: "json"
+        }).done(function(response){
+            highscore = response;
+ //           console.log('Ajax - loadDatabase: Retrieved Highscores...');
+            highscore.sort( by('score', true, parseFloat, by('time',false, parseFloat)));
+            populateHighscoreTable();
+            if ((scoreTotal > highscore[9].score) || ((scoreTotal === highscore[0]) && (timer.seconds <= highscore.time))) {
+              $("#highscoreNote2").removeClass("hide");
+              $("#highscoreForm").removeClass("hide");
+            }
+        }).fail(function (){
+            console.log("Failed to retrieve Highscores... Using default...");
+            populateHighscoreTable();
+            if ((scoreTotal > highscore[9].score) || ((scoreTotal === highscore[0]) && (timer.seconds <= highscore.time))) {
+              $("#highscoreNote2").removeClass("hide");
+              $("#highscoreForm").removeClass("hide");
+            }
+        });
     }
-
 };
 
 
@@ -257,8 +251,23 @@ $('#highscoreForm').on('submit', function(e){
   }
 
   populateHighscoreTable();
-  $("#highscoreNote2").toggleClass("hide");
-  $("#highscoreForm").toggleClass("hide");
+  $("#highscoreNote2").addClass("hide");
+  $("#highscoreForm").addClass("hide");
+
+  let updatedHighscore = JSON.stringify(highscore);
+            $.ajax({
+                url: jsonSource,
+                type: "PUT",
+                data: updatedHighscore,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, textStatus, jqXHR) {
+                    console.log('Ajax - PUT successful...');
+                }
+            }).fail(function (){
+                console.log("Ajax - Failed to PUT Highscores...");
+            });
+
 });
 
 let createIndexArray = function(size) {
@@ -274,13 +283,11 @@ let setupQuestion = function() {
 
     current = arrIndexToObj(indexArray[0],working);
     indexArray.push(indexArray.shift());
-
-if (!diffHard) {
-     workComNamTmp = working.commonName.slice();
-  } else {
-     workComNamTmp = database[current.groupType].commonName.slice();
-  }
-
+    if (!diffHard) {
+        workComNamTmp = working.commonName.slice();
+      } else {
+        workComNamTmp = database[current.groupType].commonName.slice();
+    }
     let tmp = fillChoiceRandom(current.commonName, workComNamTmp,4);
     tmp.push(current.commonName);
     choices = shuffle(tmp);
@@ -294,12 +301,7 @@ if (!diffHard) {
          $('.answerButtons').eq(i).removeClass("wrongAnswer");
          $('.answerButtons').eq(i).removeClass("correctAnswer");
     }
-//    index++;
 };
-
-
-
-
 
 function initGame(data) {
   databaseSize = data.length;
@@ -312,15 +314,14 @@ function initGame(data) {
   }
 
   let uniqueGroups = getUnique(fullGroupTypeArray);
-
   for (let i=0;i<uniqueGroups.length;i++) {
-      $("fieldset").append('<label>' + uniqueGroups[i] +'</label>');
-      $("fieldset").append('<input type="checkbox" class="subgrps" checked=true value="' + uniqueGroups[i] +'"><br>');
+      $("#fieldset1").append('<input type="checkbox" class="subgrps" checked=true value="' + uniqueGroups[i] +'">');
+      $("#fieldset1").append('<label>' + uniqueGroups[i] +'</label><br>');
       database[uniqueGroups[i]] = { commonName: [], date: [], groupType: [], imgSrc: [], latinName: [] };
   }
 
    database["full"] = { commonName: fullCommonNameArray, date: fullDateArray,
-     groupType: fullGroupTypeArray, imgSrc: fullImgSrcArray, latinName: fullLatinNameArray
+      groupType: fullGroupTypeArray, imgSrc: fullImgSrcArray, latinName: fullLatinNameArray
    };
 
 
@@ -339,10 +340,8 @@ for (let i = 0; i<uniqueGroups.length; i++) {
   working = jQuery.extend(true, {}, database.full); //copy object by value
   indexArray = shuffle(createIndexArray(working.commonName.length));
 
-  // for (let i = 0; i<$(".subgrps").length;i++) {
-  //      num += database[$(".subgrps")[i].value].commonName.length;
-  // }
-$('#numAvailableQuestions').text(database.full.date.length);
+  $("#qprInput").attr('max',indexArray.length);
+  $('#numAvailableQuestions').text(database.full.date.length);
 
 }
 
@@ -353,6 +352,7 @@ $('.answerButtons').on('click', function() {
           if(playAudio) {$('#audioRight')[0].play();}
           if(diffHard) { scoreTotal += scoreValsHard[numGuesses]; }
           else { scoreTotal += scoreVals[numGuesses]; }
+
           $('#score').text(scoreTotal);
           $("#txtAnswer").fadeIn('slow', function() {
               $("#txtAnswer").fadeOut('slow', function() {
@@ -383,10 +383,6 @@ $('#propertiesButton').on('click', function() {
         }
     }
     indexArray = shuffle(createIndexArray(working.commonName.length));
-
-//    index = 0;
-    setupQuestion();
-
 });
 
 
@@ -400,12 +396,17 @@ $(document).on('change', '.subgrps', function(){
            allUnchecked = false;
          }
       }
-
+      $("#qprInput").attr('max',num);
+      if(num < $("#qprInput").val()) { $("#qprInput").val(num);}
+      if(num === 0) { $("#qprInput").val(5);}
       if(allUnchecked) {$('#propertiesButton')[0].disabled=true;}
       else {$('#propertiesButton')[0].disabled=false;}
-
       $('#numAvailableQuestions').text(num);
+      numPerRound = $("#qprInput").val();
+});
 
+$('#qprInput').on('change', function(){
+      numPerRound = $("#qprInput").val();
 });
 
 $('#checkDate').on('change', function(){
@@ -413,19 +414,39 @@ $('#checkDate').on('change', function(){
       else {$("#txtDate").toggleClass("hide");}
 });
 
+$('#checkDiff').on('change', function(){
+      if($("#checkDiff")[0].checked) { diffHard = false; }
+      else { diffHard = true; }
+});
+
 $('#checkSound').on('change', function(){
-      if($("#checkSound")[0].checked) { playAudio = true; }
-      else { playAudio = false; }
+      if($("#checkSound")[0].checked) {
+         playAudio = true;
+         $("#audioButtonWelcome").removeClass("half");
+         $("#audioButtonMain").removeClass("half");
+       }
+      else {
+        playAudio = false;
+        $("#audioButtonWelcome").addClass("half");
+        $("#audioButtonMain").addClass("half");
+      }
 });
 
 
-$('#audioButton').on('click', function () {
-   if($("#checkSound")[0].checked) { playAudio = false;
-     $("#checkSound")[0].checked = false; }
-   else { playAudio = true;
-     $("#checkSound")[0].checked = true;
-}
+$('#audioButtonMain').on('click', function () {
+   if($("#checkSound")[0].checked) {
+      playAudio = false;
+      $("#checkSound")[0].checked = false;
+      $("#audioButtonWelcome").addClass("half");
+      $("#audioButtonMain").addClass("half");
+   } else {
+      playAudio = true;
+      $("#checkSound")[0].checked = true;
+      $("#audioButtonWelcome").removeClass("half");
+      $("#audioButtonMain").removeClass("half");
+   }
 });
+
 
 $('#startButton').on('click', function () {
    $('#welcomePane').fadeToggle('slow', function(){
@@ -436,20 +457,22 @@ $('#startButton').on('click', function () {
 
 $('#propertiesButton').on('click', function () {
    $('#propertiesPane').fadeToggle('slow', function(){
-      $('#mainPane').fadeToggle('slow');
+      $('#welcomePane').fadeToggle('slow');
    });
 });
 
 
-$('#settingButton').on('click', function () {
+$('#settingButtonMain').on('click', function () {
    $('#mainPane').fadeToggle('slow', function(){
       $('#propertiesPane').fadeToggle('slow');
    });
 });
 
-$('#homeButton').on('click', function () {
+$('#homeButtonMain').on('click', function () {
    $('#mainPane').fadeToggle('slow', function(){
       $('#welcomePane').fadeToggle('slow');
+      roundIndex = -1;
+      timer.clickPause();
    });
 });
 
@@ -466,11 +489,17 @@ $('#settingButtonWelcome').on('click', function () {
 });
 
 $('#audioButtonWelcome').on('click', function () {
-   if($("#checkSound")[0].checked) { playAudio = false;
-     $("#checkSound")[0].checked = false; }
-   else { playAudio = true;
-     $("#checkSound")[0].checked = true;
-}
+   if($("#checkSound")[0].checked) {
+      playAudio = false;
+      $("#checkSound")[0].checked = false;
+      $("#audioButtonWelcome").addClass("half");
+      $("#audioButtonMain").addClass("half");
+   } else {
+      playAudio = true;
+      $("#checkSound")[0].checked = true;
+      $("#audioButtonWelcome").removeClass("half");
+      $("#audioButtonMain").removeClass("half");
+   }
 });
 
 $('#highscoreButtonWelcome').on('click', function () {
@@ -478,15 +507,6 @@ $('#highscoreButtonWelcome').on('click', function () {
       $('#scorePane').fadeToggle('slow');
    });
 });
-
-
-
-//
-// <button class = "menu ui-btn ui-icon-gear ui-btn-icon-notext"  id="settingButtonWelcome" type="button"></button>
-// <button class = "menu ui-btn ui-icon-user ui-btn-icon-notext"  id="highscoreButtonWelcome" type="button"></button>
-// <button class = "menu ui-btn ui-icon-audio ui-btn-icon-notext" id="audioButtonWelcome" type="button"></button>
-//
-
 
 
 loadDatabase();

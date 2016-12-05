@@ -1,18 +1,16 @@
 
 body {
   text-align: center;
+  margin-top: 50px;
 }
 
 h1 {
   margin: 0;
-
 }
 
 img {
   width:480px;
 }
-
-
 
 .fullPane {
   background-color: gray;
@@ -23,9 +21,7 @@ img {
   border : 10px solid black;
 }
 
-
 #welcomePane {
-  zzzdisplay: none;
   height: 600px;
   width: 900px;
   background-image: url('../img/rsp.jpg');
@@ -53,11 +49,6 @@ font-weight: bold;
     font-size: 25px;
 }
 
-
-
-
-
-
 #mainPane {
   height: 640px;
   width: 800px;
@@ -70,21 +61,18 @@ font-weight: bold;
   display:block;
   background-color: orange;
   height: 45px;
+  border-radius: 10px 10px 0 0;
 }
 .menu {
   float: right;
-  /* opacity: .5; */
-  /* color: rgba(0,0,0,.2); */
-  /* color: red; */
   background-color: rgba(0,0,0,0);
   border-width: 0;
 }
 
-
 #photoPane {
   position:relative; /* make this relative to have the inner div absolute without breaking out */
   float:left;
-  margin : 0;
+  margin : -2px 0 0 0;
   width:  600px;
   height: 600px;
   background-color: green;
@@ -92,12 +80,12 @@ font-weight: bold;
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: local;
+  border-radius: 0 0 0 10px;
 }
 #txtAnswer {
 position: relative;;
 display: none;
 top: 250px;
-zzzleft: 150px;
 font-size: 5rem;
 font-weight: 600;
 color: rgba(255, 255, 255, 1);
@@ -121,18 +109,22 @@ text-shadow:
 .hide {
   display: none;
 }
+.half {
+  opacity: .4;
+}
 #choicePane {
   float:left;
   text-align: center;
   width: 200px;
   height: 600px;
   background-color: lightblue;
-  margin-top: -1px;
+  margin-top: -2px;
+  border-radius: 0 0 10px 0;
 }
 .answerButtons {
-  width:150px;
+  width: 150px;
   height: 75px;
-  border: 1 solid black;
+  border: 1px solid black;
   display:block;
   margin: 0 auto;
   background-color: white;
@@ -146,14 +138,12 @@ text-shadow:
 .answerButtons:hover {
   color: green;
   border: 5px solid green;
-  zzzzzbackground-color: darkgray;
 }
 .wrongAnswer{
   background-color: red;
-  border: 1 solid red;
+  border: 5px solid red;
 }.correctAnswer{
-  zzzzzzbackground-color: green;
-  border: 1 solid green;
+  border: 5px solid green;
 }
 .scoreBox {
 display:block;
@@ -161,6 +151,16 @@ margin-top: 20px;
 font-size: 25px;
 }
 
+#highscoreButton {
+  margin-top: 20px;
+}
+
+#scoreH1 {
+  margin-top: 15px;
+}
+#propertiesH1 {
+  margin-top: 15px;
+}
 
 
 #scorePane {
@@ -190,28 +190,19 @@ td, th {
     text-align: center;
     padding: 8px;
 }
-tr:nth-child(even) {
-    background-color: #dddddd;
-}
-/*#highscoreForm {
-  display: none;
-}
-#highscoreNote2 {
-  display:none;
-}*/
 
 #propertiesPane {
-display: none;
-height: 640px;
-width: 800px;
-margin: 0 auto;
-text-align: center;
-background-color: gray;
+  display: none;
+  height: 640px;
+  width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: lightblue;
 }
 .buttonBar {
   width: 200px;
   height: 30px;
-  border: 1 solid black;
+  border: 1px solid black;
   display:inline-block;
   margin: 0 auto;
 }
@@ -226,27 +217,24 @@ background-color: gray;
 #buttonBar button {
 display: inline-block;
 }
-#fieldset {
 
-
-}
-
-fieldset {
-  display: block;
-}
 #settingsPane {
   display: inline-block;
 }
 
-
+#propertiesButton {
+  margin-top: 20px;
+}
 
 fieldset {
+  display: block;
   font-family: sans-serif;
   border: 5px solid #1F497D;
-  background: #ddd;
+  background: lightblue;
   border-radius: 5px;
   padding: 15px;
-  text-align: right;
+  text-align: left;
+  margin-top: 10px;
 }
 
 fieldset legend {
@@ -255,17 +243,13 @@ fieldset legend {
   padding: 5px 10px ;
   font-size: 32px;
   border-radius: 5px;
-  box-shadow: 0 0 0 5px #ddd;
-  margin-left: 20px;
-}
-
-#sliders {
-
-zzzzdisplay: inline-block;
+  box-shadow: 0 0 0 5px lightblue;
+  margin: 0 auto;
 }
 
 .ppp {
   display: inline-block;
+  text-align: center;
 }
 
 /* .slideThree */
@@ -273,10 +257,10 @@ zzzzdisplay: inline-block;
   width: 80px;
   height: 26px;
   background: #333;
-  margin: 20px auto;
+  margin: 10px auto;
   position: relative;
   border-radius: 50px;
-  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .slideThree:after {
   content: 'OFF';
@@ -286,7 +270,7 @@ zzzzdisplay: inline-block;
   z-index: 0;
   font: 12px/26px Arial, sans-serif;
   font-weight: bold;
-  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.15);
 }
 .slideThree:before {
   content: 'ON';
@@ -312,7 +296,7 @@ zzzzdisplay: inline-block;
   border-radius: 50px;
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
 }
 .slideThree input[type=checkbox] {
   visibility: hidden;
@@ -325,10 +309,10 @@ zzzzdisplay: inline-block;
   width: 103px;
   height: 26px;
   background: #333;
-  margin: 20px auto;
+  margin: 10px auto;
   position: relative;
   border-radius: 50px;
-  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .slideThree2:after {
   content: 'HARD';
@@ -338,7 +322,7 @@ zzzzdisplay: inline-block;
   z-index: 0;
   font: 12px/26px Arial, sans-serif;
   font-weight: bold;
-  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.15);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.15);
 }
 .slideThree2:before {
   content: 'EASY';
@@ -364,7 +348,7 @@ zzzzdisplay: inline-block;
   border-radius: 50px;
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
 }
 .slideThree2 input[type=checkbox] {
   visibility: hidden;
@@ -372,7 +356,6 @@ zzzzdisplay: inline-block;
 .slideThree2 input[type=checkbox]:checked + label {
   left: 50px;
 }
-
 
 /* end .slideThree */
 
@@ -387,5 +370,4 @@ button.ui-btn-icon-notext, .ui-controlgroup-horizontal .ui-controlgroup-controls
     box-sizing: content-box;
     width: 1.75em;
     border-width: 0;
-
 }

@@ -13,19 +13,19 @@
 </head>
 <body>
 
-  <audio id="audioWrong">
+<audio id="audioWrong">
   	<source src="audio/wronganswer.mp3" type="audio/mpeg"></source>
-  </audio>
-  <audio id="audioRight">
+</audio>
+<audio id="audioRight">
   	<source id="audioRight" src="audio/335908__littlerainyseasons__correct.mp3" type="audio/mpeg"></source>
-  </audio>
+</audio>
 
 <div class="fullPane" id="mainPane">
     <div id="title">
 
-        <button class = "menu ui-btn ui-icon-home ui-btn-icon-notext" id="homeButton" type="button"></button>
-        <button class = "menu ui-btn ui-icon-gear ui-btn-icon-notext" id="settingButton" type="button"></button>
-        <button class = "menu ui-btn ui-icon-audio ui-btn-icon-notext" id="audioButton" type="button"></button>
+        <button class = "menu ui-btn ui-icon-home ui-btn-icon-notext" id="homeButtonMain" type="button"></button>
+  <!--         <button class = "menu ui-btn ui-icon-gear ui-btn-icon-notext" id="settingButtonMain" type="button"></button> -->
+        <button class = "menu ui-btn ui-icon-audio ui-btn-icon-notext" id="audioButtonMain" type="button"></button>
         <h1>RI Butterfly Quiz</h1>
 
     </div>
@@ -63,7 +63,7 @@
 </div>
 
 <div class="fullPane" id="scorePane">
-       <h1>Highscore List</h1>
+       <h1 id='scoreH1' >Highscore List</h1>
        <h2 id="highscoreNote"></h2>
     <div class="formbox">
        <h2 class="hide" id="highscoreNote2"></h2>
@@ -78,61 +78,51 @@
 </div>
 
 <div class="fullPane" id="propertiesPane">
-<div id='settingsPane'>
-       <h1>Settings</h1>
+    <div id='settingsPane'>
+        <h1 id='propertiesH1' >Settings</h1>
 
-       <div id="fieldset">
-           <fieldset data-role="controlgroup" data-type="horizontal">
-                <legend>Which Butterfly families to include:</legend>
+        <div id="fieldset">
+           <fieldset id='fieldset1' data-role="controlgroup" data-type="horizontal">
+                <legend>Butterfly Families</legend>
+                <h3>Available Questions: <span id="numAvailableQuestions">0</span></h3>
+                <h5>Questions per Round:
+                    <input id="qprInput" type="number" name="points" min="5" max="100" step="5" value="10">
+                </h5>
            </fieldset>
-           <h3>Available Questions: <span id="numAvailableQuestions">0</span></h3>
-           <h5>Questions per Round:
-             <input id="qprInput" type="number" name="points" min="0" max="100" step="5" value="10">
-           </h5>
+
+         </div>
+
+         <div id='sliders'>
+         <fieldset data-role="controlgroup" data-type="vertical">
+           <legend>Options</legend>
+            <div class="ppp">
+                <h5>Dates</h5>
+                <div class="slideThree">
+                    <input type="checkbox" value="None" id="checkDate" name="check" />
+                    <label for="checkDate"></label>
+                </div>
+            </div>
+            <div class="ppp">
+                <h5>Sound</h5>
+                <div class="slideThree">
+                    <input type="checkbox" value="None" id="checkSound" name="check" checked />
+                    <label for="checkSound"></label>
+                </div>
+            </div>
+            <div class="ppp">
+                <h5>Difficulty</h5>
+                <div class="slideThree2">
+                    <input type="checkbox" value="None" id="checkDiff" name="check" checked />
+                    <label for="checkDiff"></label>
+                </div>
+            </div>
+          </fieldset>
        </div>
 
-<div id='sliders'>
-      <div class="ppp">
-        <h5>Show Latin Names</h5>
-        <div class="slideThree">
-          <input type="checkbox" value="None" id="checkLatin" name="check" />
-          <label for="checkLatin"></label>
-        </div>
-      </div>
-<div class="ppp">
-  <h5>Show Dates</h5>
-  <div class="slideThree">
-    <input type="checkbox" value="None" id="checkDate" name="check" />
-    <label for="checkDate"></label>
-  </div>
+         <button id="propertiesButton">Done</button>
+
+    </div>
 </div>
-<div class="ppp">
-  <h5>Sound Effects</h5>
-  <div class="slideThree">
-    <input type="checkbox" value="None" id="checkSound" name="check" checked />
-    <label for="checkSound"></label>
-  </div>
-</div>
-<div class="ppp">
-  <h5>Difficulty</h5>
-  <div class="slideThree2">
-    <input type="checkbox" value="None" id="checkDiff" name="check" checked />
-    <label for="checkDiff"></label>
-  </div>
-</div>
-
-  </div>
-
-       <button id="propertiesButton">Done</button>
-
-</div>
-
-</div>
-
-
-
-
-
 
 
 <script src="data.js"></script>
