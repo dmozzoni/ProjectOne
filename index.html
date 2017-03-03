@@ -1,131 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-  <link rel="stylesheet" type="text/css" href="css/style.css">
-  <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-  <title>RI Butterfly Trivia</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <title>RI Butterfly Trivia</title>
 </head>
+
 <body>
 
-<audio id="audioWrong">
-  	<source src="audio/wronganswer.mp3" type="audio/mpeg"></source>
-</audio>
-<audio id="audioRight">
-  	<source id="audioRight" src="audio/335908__littlerainyseasons__correct.mp3" type="audio/mpeg"></source>
-</audio>
+    <audio id="audioWrong">
+  	   <source src="audio/wronganswer.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="audioRight">
+  	   <source src="audio/335908__littlerainyseasons__correct.mp3" type="audio/mpeg">
+    </audio>
 
-<div class="fullPane" id="mainPane">
-    <div id="title">
-
-        <button class = "menu ui-btn ui-icon-home ui-btn-icon-notext" id="homeButtonMain" type="button"></button>
-  <!--         <button class = "menu ui-btn ui-icon-gear ui-btn-icon-notext" id="settingButtonMain" type="button"></button> -->
-        <button class = "menu ui-btn ui-icon-audio ui-btn-icon-notext" id="audioButtonMain" type="button"></button>
-        <h1>RI Butterfly Quiz</h1>
-
-    </div>
-
-    <div id="photoPane">
-        <div id="txtAnswer">Correct</div>
-        <div class="hide" id="txtDate"></div>
-    </div>
-
-    <div id="choicePane">
-        <h3>Choices</h3>
-        <button class="answerButtons" id="button1">Button1</button>
-        <button class="answerButtons" id="button2">Button2</button>
-        <button class="answerButtons" id="button3">Button3</button>
-        <button class="answerButtons" id="button4">Button4</button>
-        <button class="answerButtons" id="button5">Button5</button>
-
-        <div class="scoreBox">
-          <div>Score: <span id="score">0</span></div>
-          <div>Time:  <span id="timer">0</span></div>
+    <div class="fullPane" id="mainPane">
+        <div id="title">
+            <button class="menu ui-btn ui-icon-home ui-btn-icon-notext" id="homeButtonMain" type="button"></button>
+            <!-- <button class = "menu ui-btn ui-icon-gear ui-btn-icon-notext" id="settingButtonMain" type="button"></button> -->
+            <button class="menu ui-btn ui-icon-audio ui-btn-icon-notext" id="audioButtonMain" type="button"></button>
+            <h1>RI Butterfly Quiz</h1>
         </div>
-
-    </div>
-</div>
-
-<div class="fullPane" id="welcomePane">
-
-  <button class = "menu ui-btn ui-icon-gear ui-btn-icon-notext"  id="settingButtonWelcome" type="button"></button>
-  <button class = "menu ui-btn ui-icon-user ui-btn-icon-notext"  id="highscoreButtonWelcome" type="button"></button>
-  <button class = "menu ui-btn ui-icon-audio ui-btn-icon-notext" id="audioButtonWelcome" type="button"></button>
-
-       <h1 id='welcomeH1'>Welcome</h1>
-       <h2>How well do you know the Butterflies of Rhode Island?</h2>
-       <button id="startButton">Start</button>
-</div>
-
-<div class="fullPane" id="scorePane">
-       <h1 id='scoreH1' >Highscore List</h1>
-       <h2 id="highscoreNote"></h2>
-    <div class="formbox">
-       <h2 class="hide" id="highscoreNote2"></h2>
-       <form class="hide" id="highscoreForm">
-         <input type="text" id="user-field" maxlength="20" autofocus placeholder="Anonymous"></input>
-         <button id="set-user">Submit Highscore</button>
-       </form>
+        <div id="photoPane">
+            <div id="txtAnswer">Correct</div>
+            <div class="hide" id="txtDate"></div>
+        </div>
+        <div id="choicePane">
+            <h3>Choices</h3>
+            <button class="answerButtons" id="button1">Button1</button>
+            <button class="answerButtons" id="button2">Button2</button>
+            <button class="answerButtons" id="button3">Button3</button>
+            <button class="answerButtons" id="button4">Button4</button>
+            <button class="answerButtons" id="button5">Button5</button>
+            <div class="scoreBox">
+                <div>Score: <span id="score">0</span></div>
+                <div>Time: <span id="timer">0</span></div>
+            </div>
+        </div>
     </div>
 
-       <table id="highscoreTable"></table>
-       <button id="highscoreButton">Home</button>
-</div>
+    <div class="fullPane" id="welcomePane">
+        <button class="menu ui-btn ui-icon-gear ui-btn-icon-notext" id="settingButtonWelcome" type="button"></button>
+        <button class="menu ui-btn ui-icon-user ui-btn-icon-notext" id="highscoreButtonWelcome" type="button"></button>
+        <button class="menu ui-btn ui-icon-audio ui-btn-icon-notext" id="audioButtonWelcome" type="button"></button>
+        <h1 id='welcomeH1'>Welcome</h1>
+        <h2>How well do you know the Butterflies of Rhode Island?</h2>
+        <button class="hvr-radial-in" id="startButton"><span>Start</span></button>
+    </div>
 
-<div class="fullPane" id="propertiesPane">
-    <div id='settingsPane'>
-        <h1 id='propertiesH1' >Settings</h1>
+    <div class="fullPane" id="scorePane">
+        <h1 id='scoreH1'>Highscore List</h1>
+        <h2 id="highscoreNote"></h2>
+        <div class="formbox">
+            <h2 class="hide" id="highscoreNote2"></h2>
+            <form class="hide" id="highscoreForm">
+                <input type="text" id="user-field" maxlength="20" autofocus placeholder="Anonymous">
+                <button id="set-user">Submit Highscore</button>
+            </form>
+        </div>
+        <table id="highscoreTable"></table>
+        <button id="highscoreButton">Home</button>
+    </div>
 
-        <div id="fieldset">
-           <fieldset id='fieldset1' data-role="controlgroup" data-type="horizontal">
-                <legend>Butterfly Families</legend>
-                <h3>Available Questions: <span id="numAvailableQuestions">0</span></h3>
-                <h5>Questions per Round:
+    <div class="fullPane" id="propertiesPane">
+        <div id='settingsPane'>
+            <h1 id='propertiesH1'>Settings</h1>
+            <div id="fieldset">
+                <fieldset id='fieldset1' data-role="controlgroup" data-type="horizontal">
+                    <legend>Butterfly Families</legend>
+                    <h3>Available Questions: <span id="numAvailableQuestions">0</span></h3>
+                    <h5>Questions per Round:
                     <input id="qprInput" type="number" name="points" min="5" max="100" step="5" value="10">
                 </h5>
-           </fieldset>
-
-         </div>
-
-         <div id='sliders'>
-         <fieldset data-role="controlgroup" data-type="vertical">
-           <legend>Options</legend>
-            <div class="ppp">
-                <h5>Dates</h5>
-                <div class="slideThree">
-                    <input type="checkbox" value="None" id="checkDate" name="check" />
-                    <label for="checkDate"></label>
-                </div>
+                </fieldset>
             </div>
-            <div class="ppp">
-                <h5>Sound</h5>
-                <div class="slideThree">
-                    <input type="checkbox" value="None" id="checkSound" name="check" checked />
-                    <label for="checkSound"></label>
-                </div>
+            <div id='sliders'>
+                <fieldset data-role="controlgroup" data-type="vertical">
+                    <legend>Options</legend>
+                    <div class="sliderOption">
+                        <h5>Dates</h5>
+                        <div class="slideThree">
+                            <input type="checkbox" value="None" id="checkDate" name="check" />
+                            <label for="checkDate"></label>
+                        </div>
+                    </div>
+                    <div class="sliderOption">
+                        <h5>Sound</h5>
+                        <div class="slideThree">
+                            <input type="checkbox" value="None" id="checkSound" name="check" checked />
+                            <label for="checkSound"></label>
+                        </div>
+                    </div>
+                    <div class="sliderOption">
+                        <h5>Difficulty</h5>
+                        <div class="slideThree2">
+                            <input type="checkbox" value="None" id="checkDiff" name="check" checked />
+                            <label for="checkDiff"></label>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
-            <div class="ppp">
-                <h5>Difficulty</h5>
-                <div class="slideThree2">
-                    <input type="checkbox" value="None" id="checkDiff" name="check" checked />
-                    <label for="checkDiff"></label>
-                </div>
-            </div>
-          </fieldset>
-       </div>
-
-         <button id="propertiesButton">Done</button>
-
+            <button id="propertiesButton">Done</button>
+        </div>
     </div>
-</div>
 
-
-<script src="data.js"></script>
+    <script src="script\script.js"></script>
 
 </body>
+
 </html>
