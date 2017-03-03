@@ -97,9 +97,9 @@ function shuffle(array) {
 
 
 function loadDatabase() {
-      d3.csv(dataFileSrc, function(data) {
-      //  d3.csv("http://localhost:8000/data.csv", function(data) {
-      //  d3.csv("data.csv", function(data) {
+      // d3.csv(dataFileSrc, function(data) {
+      // d3.csv("http://localhost:8000/data.csv", function(data) {
+       d3.csv("data.csv", function(data) {
             initGame(data);
        });
        $.ajax({
