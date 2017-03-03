@@ -37,7 +37,6 @@ A quiz round is started once this page is displayed. It is timed. A photo of a b
 
 There are buttons on the top right of the page to toggle the sound effects and return to the Welcome Page (this aborts the current round).
 
-
 ## Google Sheets
 
 Initially, I created the database of questions in a Google Spreadsheet and then published it as a CSV file. I would then fetch this file when the program started. However, due to possible "Access-Control-Allow-Origin" errors depending upon browser settings I ultimately opted to just store the database CSV file and fetch it locally.
