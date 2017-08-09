@@ -14,7 +14,7 @@ A page that aggregates some optional settings:
 
 - There is an option to select the number of questions per round.
 
-- There is an option to turn on an overlay of the date a photo was taken (some butterflies species can look similar but have different flight times).
+- There is an option to turn on an overlay of the date a photo was taken (some butterfly species can look similar but have different flight times).
 
 - There is an option to turn off sound effects.
 
@@ -24,7 +24,7 @@ A page that aggregates some optional settings:
 
 A page to display the current set of high scores.
 
-I use `http://myjson.com/`, which is a site that provides a free JSON store service, to sotre the highscore data.
+I use `http://myjson.com/`, which is a site that provides a free JSON store service, to store the highscore data.
 Using Ajax I `GET` and `PUT` the scores, which allows for score continuity across a browser refresh as well as across different clients. This is not particularly robust and would likely drop scores under heavy load.
 
 After a round is completed, if your score is high enough to be included on the high score list an input form is displayed to submit a user name. The user/score is then added to the list locally as well as the JSON store.
